@@ -20,13 +20,13 @@ export default function Project() {
       scale: scaleProgess,
       opacity: opacityProgess,
     }}*/
-    className="group scroll-mt-28 mb-3 sm:mb-8 last:mb-0"
+    className="group pl-4 pr-4 scroll-mt-28 mb-3 sm:mb-8 last:mb-0"
     id='projects'
   >
     <section className="">
         <SectionHeading>My projects</SectionHeading>
         <div>
-          <Video src={video01} width={460} height={259}/>
+          <Video src={video01} width={430} height={242}/>
         </div>
     </section>
     </motion.div>
