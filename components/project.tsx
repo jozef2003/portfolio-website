@@ -20,7 +20,7 @@ export default function Project() {
       scale: scaleProgess,
       opacity: opacityProgess,
     }}*/
-    className="group pl-4 pr-4 scroll-mt-28 mb-3 sm:mb-8 last:mb-0"
+    className="group scroll-mt-28 mb-3 sm:mb-8 sm:mr-6 sm:ml-6 last:mb-0"
     id='projects'
   >
     <section className="">
