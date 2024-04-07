@@ -1,4 +1,4 @@
-"use client";
+/*"use client";
 
 import { useTheme } from "@/context/theme-context";
 import React from "react";
@@ -15,4 +15,4 @@ export default function ThemeSwitch() {
       {theme === "light" ? <BsSun /> : <BsMoon />}
     </button>
   );
-}
+}*/

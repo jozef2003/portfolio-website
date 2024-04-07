@@ -25,8 +25,10 @@ export default function Project() {
   >
     <section className="">
         <SectionHeading>My projects</SectionHeading>
+        <div className='container mx-auto'>
         <div className="pr-4 pl-4">
-          <Video src={video01} width={430} height={242} />
+          <Video src={video01} width={370} height={208} />
+        </div>
         </div>
     </section>
     </motion.div>

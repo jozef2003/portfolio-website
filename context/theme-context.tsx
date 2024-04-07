@@ -1,4 +1,4 @@
-"use client";
+/*"use client";
 
 import React, { useEffect, useState, createContext, useContext } from "react";
 
@@ -67,4 +67,4 @@ export function useTheme() {
   }
 
   return context;
-}
+}*/
