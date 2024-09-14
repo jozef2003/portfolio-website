@@ -40,6 +40,9 @@ export async function POST(request: Request) {
         },
       ],
       mode: 'payment',
+      metadata: {
+        language: language,  // Hier wird die Sprache in die Metadaten aufgenommen
+      },
       success_url: `${domain}/success?session_id={CHECKOUT_SESSION_ID}`, // Volle URL für Erfolg
       cancel_url: `${domain}/cancel`, // Volle URL für Abbruch
     });
@@ -53,6 +56,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Fehler bei der Erstellung der Checkout-Session' }, { status: 500 });
   }
 }
+
 
 
 
