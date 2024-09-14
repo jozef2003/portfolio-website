@@ -1,62 +1,58 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { buffer } from 'micro';
 import nodemailer from 'nodemailer';
 import path from 'path';
 
-// Stripe und Webhook-Signing-Secret initialisieren
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-// Deaktiviere das automatische Body-Parsing von Next.js
-export const runtime = 'nodejs'; // Neuere Methode, ersetzt export const config
+// API-Routen-Konfiguration
+export const config = {
+  api: {
+    bodyParser: false, // Deaktiviert das automatische Body-Parsing
+  },
+};
 
-// POST-Handler für Webhook-Verarbeitung
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const sig = req.headers['stripe-signature'];
+export async function POST(req: Request) {
+  const sig = req.headers.get('stripe-signature');
 
-    try {
-      // Verwandle das Request-Objekt in einen Buffer
-      const buf = await buffer(req);
+  try {
+    // Buffer das Request-Objekt
+    const buf = await req.arrayBuffer();
+    const buffer = Buffer.from(buf);
 
-      // Validieren des Webhook-Ereignisses
-      const event = stripe.webhooks.constructEvent(buf, sig!, webhookSecret);
+    // Validieren des Webhook-Ereignisses
+    const event = stripe.webhooks.constructEvent(buffer, sig!, webhookSecret);
 
-      // Verarbeite das Ereignis `checkout.session.completed`
-      if (event.type === 'checkout.session.completed') {
-        const session = event.data.object as Stripe.Checkout.Session;
+    // Verarbeite das Ereignis `checkout.session.completed`
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as Stripe.Checkout.Session;
 
-        // Extrahiere Kunden-E-Mail
-        const customerEmail = session.customer_details?.email ?? undefined;
+      // Extrahiere Kunden-E-Mail
+      const customerEmail = session.customer_details?.email ?? undefined;
 
-        // Überprüfe die Sprache und setze Standard auf "de"
-        const language = session.metadata?.language || "de";
+      // Überprüfe die Sprache und setze Standard auf "de"
+      const language = session.metadata?.language || "de";
 
-        // Sende das E-Book an die entsprechende E-Mail-Adresse
-        if (typeof customerEmail === 'string') {
-          console.log(`Sende E-Book an: ${customerEmail} in Sprache: ${language}`);
-          await sendEbookByEmail(customerEmail, language);
-        } else {
-          console.error('Ungültige E-Mail-Adresse:', customerEmail);
-        }
-
-        res.status(200).json({ received: true });
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        console.error('Webhook-Fehler:', err.message);
-        res.status(400).send(`Webhook-Fehler: ${err.message}`);
+      // Sende das E-Book an die entsprechende E-Mail-Adresse
+      if (typeof customerEmail === 'string') {
+        console.log(`Sende E-Book an: ${customerEmail} in Sprache: ${language}`);
+        await sendEbookByEmail(customerEmail, language);
       } else {
-        res.status(400).send('Unbekannter Webhook-Fehler');
+        console.error('Ungültige E-Mail-Adresse:', customerEmail);
       }
+
+      return NextResponse.json({ received: true });
     }
-  } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
+  } catch (err) {
+    console.error('Webhook-Fehler:', err instanceof Error ? err.message : 'Unbekannter Fehler');
+    return new NextResponse(`Webhook-Fehler: ${err instanceof Error ? err.message : 'Unbekannter Fehler'}`, { status: 400 });
   }
+
+  return new NextResponse('Method Not Allowed', { status: 405 });
 }
 
 // Funktion zum Versenden der E-Mail mit der entsprechenden PDF
@@ -99,6 +95,7 @@ async function sendEbookByEmail(email: string, language: string) {
     console.error(`Fehler beim Senden der E-Mail an ${email}:`, error);
   }
 }
+
 
 
 
