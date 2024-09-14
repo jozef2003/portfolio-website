@@ -68,7 +68,7 @@ async function sendEbookByEmail(email: string, language: string) {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: language === 'en' ? 'Your Fitness E-Book' : 'Dein Fitness E-Book',
+    subject: language === 'en' ? 'The Engine e-book' : 'The Engine E-Book',
     text: language === 'en'
       ? 'Thank you for your purchase! Here is your e-book.'
       : 'Vielen Dank für deinen Kauf! Hier ist dein E-Book.',

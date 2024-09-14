@@ -77,18 +77,18 @@ const EbookSale = () => {
     >
       <SectionHeading>Ebook</SectionHeading>
 
-      <div className="flex justify-center items-center mx-auto max-w-6xl mt-12 flex-col sm:flex-row">
+      <div className="flex flex-col items-center mt-12 sm:flex-row">
         <motion.div
-          className="flex-1 max-w-sm mr-8 relative overflow-hidden"
+          className="relative overflow-hidden w-full max-w-md sm:max-w-sm sm:mr-8 sm:w-[30rem]"
           {...handlers}
         >
-          <div className="relative w-full h-[30rem]">
+          <div className="relative w-full h-[40rem] sm:h-[35rem]">
             <AnimatePresence initial={false} custom={direction}>
               <motion.img
                 key={page}
                 src={images[imageIndex]}
                 alt="E-Book Cover"
-                className="absolute w-full h-full object-cover rounded-lg shadow-lg"
+                className="absolute inset-0 w-full h-full object-cover rounded-lg shadow-lg"
                 initial={{ opacity: 0, x: direction > 0 ? 100 : -100 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: direction > 0 ? -100 : 100 }}
@@ -97,6 +97,7 @@ const EbookSale = () => {
             </AnimatePresence>
           </div>
 
+          {/* Navigation Buttons */}
           <div className="absolute top-1/2 left-0 transform -translate-y-1/2">
             <button
               aria-label="Previous Image"
@@ -118,7 +119,7 @@ const EbookSale = () => {
         </motion.div>
 
         <motion.div
-          className="flex-1 flex flex-col items-center justify-center text-left"
+          className="flex-1 flex flex-col items-center justify-center text-left mt-6 sm:mt-0"
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
@@ -139,7 +140,7 @@ const EbookSale = () => {
               id="language"
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="p-2 border rounded-md text-center w-3/4 sm:w-1/2"
+              className="p-3 border rounded-md text-center w-3/4 sm:w-1/2 md:w-3/4 lg:w-3/5 xl:w-2/5"
             >
               <option value="">Select a language</option>
               <option value="de">German</option>
@@ -163,6 +164,16 @@ const EbookSale = () => {
 };
 
 export default EbookSale;
+
+
+
+
+
+
+
+
+
+
 
 
 
