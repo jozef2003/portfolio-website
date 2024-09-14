@@ -1,10 +1,8 @@
 import Intro from "@/components/intro"
 import SectionDivider from "@/components/section-divider"
 import About from "@/components/about"
-import Projects from "@/components/project"
-import Skills from "@/components/skills"
-import Experience from "@/components/experience"
 import Contact from "@/components/contact"
+import EbookSale from '../components/ebook-sale';
 
 export default function Home() {
   return (
@@ -12,9 +10,7 @@ export default function Home() {
       <Intro/>
       <SectionDivider />
       <About />
-      <Projects />
-      <Skills />
-      <Experience />
+      <EbookSale />
       <Contact />
     </main>
   )
