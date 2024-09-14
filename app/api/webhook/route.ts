@@ -9,13 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-// API-Routen-Konfiguration
-export const config = {
-  api: {
-    bodyParser: false, // Deaktiviert das automatische Body-Parsing
-  },
-};
-
+// Funktion zum Verarbeiten von POST-Anfragen
 export async function POST(req: Request) {
   const sig = req.headers.get('stripe-signature');
 
@@ -95,6 +89,7 @@ async function sendEbookByEmail(email: string, language: string) {
     console.error(`Fehler beim Senden der E-Mail an ${email}:`, error);
   }
 }
+
 
 
 
