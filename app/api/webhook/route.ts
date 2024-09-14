@@ -10,34 +10,36 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-// Deaktiviere das automatische Body-Parsing von Next.js
+// Deaktiviere das Body-Parsing von Next.js (aktuelle Methode)
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: false, // Deaktiviert das automatische Body-Parsing
   },
 };
 
+// POST-Handler für Webhook-Verarbeitung
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const sig = req.headers['stripe-signature'];
 
     try {
-      // Stripe erwartet das Request-Body als Buffer (rohe Daten)
+      // Verwandle das Request-Objekt in einen Buffer
       const buf = await buffer(req);
 
-      // Webhook validieren mit der Signatur
+      // Validieren des Webhook-Ereignisses
       const event = stripe.webhooks.constructEvent(buf, sig!, webhookSecret);
 
       // Verarbeite das Ereignis `checkout.session.completed`
       if (event.type === 'checkout.session.completed') {
         const session = event.data.object as Stripe.Checkout.Session;
 
-        // Kunden-E-Mail extrahieren
+        // Extrahiere Kunden-E-Mail
         const customerEmail = session.customer_details?.email ?? undefined;
 
-        // Überprüfe, ob Metadaten vorhanden sind und setze Standard auf "de"
+        // Überprüfe die Sprache und setze Standard auf "de"
         const language = session.metadata?.language || "de";
 
+        // Sende das E-Book an die entsprechende E-Mail-Adresse
         if (typeof customerEmail === 'string') {
           console.log(`Sende E-Book an: ${customerEmail} in Sprache: ${language}`);
           await sendEbookByEmail(customerEmail, language);
@@ -101,6 +103,7 @@ async function sendEbookByEmail(email: string, language: string) {
     console.error(`Fehler beim Senden der E-Mail an ${email}:`, error);
   }
 }
+
 
 
 
