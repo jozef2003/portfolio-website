@@ -10,12 +10,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-// Deaktiviere das Body-Parsing von Next.js (aktuelle Methode)
-export const config = {
-  api: {
-    bodyParser: false, // Deaktiviert das automatische Body-Parsing
-  },
-};
+// Deaktiviere das automatische Body-Parsing von Next.js
+export const runtime = 'nodejs'; // Neuere Methode, ersetzt export const config
 
 // POST-Handler für Webhook-Verarbeitung
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -103,6 +99,7 @@ async function sendEbookByEmail(email: string, language: string) {
     console.error(`Fehler beim Senden der E-Mail an ${email}:`, error);
   }
 }
+
 
 
 
