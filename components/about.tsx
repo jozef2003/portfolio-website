@@ -19,13 +19,13 @@ export default function About() {
     >
       <SectionHeading>About me</SectionHeading>
       <p className="mb-3">
-  When I started my bachelor's degree in{" "}
+  When I started my bachelors degree in{" "}
   <span className="font-medium">economics at LMU</span>, I discovered my passion for endurance 
-  sports, especially triathlon and later hybrid training such as Hyrox. My dedication to training led me to run a marathon in 3 hours, and I later qualified for the <span className="font-medium">Hyrox World Championship in Nice, France</span>, where I proudly competed against some of the world's best athletes.
+  sports, especially triathlon and later hybrid training such as Hyrox. My dedication to training led me to run a marathon in 3 hours, and I later qualified for the <span className="font-medium">Hyrox World Championship in Nice, France</span>, where I proudly competed against some of the worlds best athletes.
 </p>
 
 <p className="mb-3">
-  Throughout my journey, I have learned that fitness is more than just physical training, it's about pushing your limits, both mentally and physically. My goal is to inspire others to take control of their fitness, challenge themselves, and reach new levels of performance.
+  Throughout my journey, I have learned that fitness is more than just physical training, its about pushing your limits, both mentally and physically. My goal is to inspire others to take control of their fitness, challenge themselves, and reach new levels of performance.
 </p>
 
 
