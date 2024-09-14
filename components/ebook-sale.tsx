@@ -124,7 +124,7 @@ const EbookSale = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <p className="text-3xl font-bold mb-6">€34.00 EUR</p>
+          <p className="text-xl font-bold mb-6">€34.00 EUR</p>
 
           <p className="mb-6 leading-relaxed text-center">
             The Engine: A Guide to Hyrox, Marathon, and Half-Marathon Training.
