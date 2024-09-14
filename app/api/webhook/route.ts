@@ -4,6 +4,7 @@ import nodemailer from 'nodemailer';
 import path from 'path';
 import { buffer } from 'micro';
 
+// Erstelle eine Instanz von Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
@@ -91,12 +92,8 @@ async function sendEbookByEmail(email: string, language: string) {
   }
 }
 
-// Stellt sicher, dass der Buffer als Middleware verwendet wird (wichtig für Webhooks)
-export const config = {
-  api: {
-    bodyParser: false, // Deaktiviere den Body-Parser, damit die rohen Daten gelesen werden können
-  },
-};
+// Die `bodyParser`-Konfiguration wird nun in der App-Konfiguration oder direkt in der Route definiert
+
 
 
 
