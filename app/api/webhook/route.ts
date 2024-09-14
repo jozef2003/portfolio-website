@@ -64,7 +64,7 @@ async function sendEbookByEmail(email: string, language: string) {
   // Pfad zur PDF-Datei basierend auf der Sprache
   let filePath = path.join(process.cwd(), 'public', 'The-Engine.pdf'); // Standard Deutsch
   if (language === 'en') {
-    filePath = path.join(process.cwd(), 'public', 'The-Engine_English.pdf'); // Englisch
+    filePath = path.join(process.cwd(), 'public', 'The-Engine-English.pdf'); // Englisch
   }
 
   const mailOptions = {
