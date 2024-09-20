@@ -8,13 +8,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: Request) {
   try {
-    // Hole die gewählte Sprache aus der Anfrage
-    const { language } = await request.json();
-
-    console.log("Ausgewählte Sprache:", language); // Logge die ausgewählte Sprache
-
-    // Wähle die Price-ID basierend auf der Sprache
-    const priceId = language === 'de' ? process.env.PRICE_ID_DE : process.env.PRICE_ID_EN;
+    // Hole die priceId aus der Anfrage (wird jetzt für jedes Buch individuell gesendet)
+    const { priceId } = await request.json();
 
     console.log("Verwendete Price-ID:", priceId); // Logge die verwendete Price-ID
 
@@ -35,14 +30,11 @@ export async function POST(request: Request) {
       payment_method_types: ['card', 'paypal'],
       line_items: [
         {
-          price: priceId, // Verwendete Stripe Price ID basierend auf der Sprache
+          price: priceId, // Verwendete Stripe Price ID, die direkt von der Anfrage kommt
           quantity: 1,
         },
       ],
       mode: 'payment',
-      metadata: {
-        language: language,  // Hier wird die Sprache in die Metadaten aufgenommen
-      },
       success_url: `${domain}/success?session_id={CHECKOUT_SESSION_ID}`, // Volle URL für Erfolg
       cancel_url: `${domain}/cancel`, // Volle URL für Abbruch
     });
@@ -56,6 +48,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Fehler bei der Erstellung der Checkout-Session' }, { status: 500 });
   }
 }
+
 
 
 

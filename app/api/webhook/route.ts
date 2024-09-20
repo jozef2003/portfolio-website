@@ -1,5 +1,3 @@
-// app/api/webhook/route.ts
-
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import nodemailer from 'nodemailer';
@@ -28,13 +26,13 @@ export async function POST(req: Request) {
       // Extrahiere Kunden-E-Mail
       const customerEmail = session.customer_details?.email ?? undefined;
 
-      // Überprüfe die Sprache und setze Standard auf "de"
-      const language = session.metadata?.language || 'de';
+      // Extrahiere Price-ID, um zu identifizieren, welches E-Book gekauft wurde
+      const priceId = session.metadata?.priceId;
 
-      // Sende das E-Book an die entsprechende E-Mail-Adresse
+      // Sende das entsprechende E-Book an die E-Mail-Adresse
       if (typeof customerEmail === 'string') {
-        console.log(`Sende E-Book an: ${customerEmail} in Sprache: ${language}`);
-        await sendEbookByEmail(customerEmail, language);
+        console.log(`Sende E-Book an: ${customerEmail}, Price-ID: ${priceId}`);
+        await sendEbookByEmail(customerEmail, priceId);
       } else {
         console.error('Ungültige E-Mail-Adresse:', customerEmail);
       }
@@ -52,7 +50,7 @@ export async function POST(req: Request) {
 }
 
 // Funktion zum Versenden der E-Mail mit der entsprechenden PDF
-async function sendEbookByEmail(email: string, language: string) {
+async function sendEbookByEmail(email: string, priceId: string | undefined) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -61,22 +59,36 @@ async function sendEbookByEmail(email: string, language: string) {
     },
   });
 
-  // Pfad zur PDF-Datei basierend auf der Sprache
-  let filePath = path.join(process.cwd(), 'public', 'The-Engine.pdf'); // Standard Deutsch
-  if (language === 'en') {
-    filePath = path.join(process.cwd(), 'public', 'The-Engine-English.pdf'); // Englisch
+  // Bestimme das E-Book basierend auf der Price-ID
+  let filePath;
+  let subject;
+  let text;
+
+  if (priceId === process.env.PRICE_ID_SUB4) {
+    filePath = path.join(process.cwd(), 'public', 'Sub4-Marathon.pdf');
+    subject = 'Sub 4 Hour Marathon Plan';
+    text = 'Thank you for your purchase of the Sub 4 Hour Marathon Plan! Here is your e-book.';
+  } else if (priceId === process.env.PRICE_ID_SUB330) {
+    filePath = path.join(process.cwd(), 'public', 'Sub3-30-Marathon.pdf');
+    subject = 'Sub 3:30 Marathon Plan';
+    text = 'Thank you for your purchase of the Sub 3:30 Marathon Plan! Here is your e-book.';
+  } else if (priceId === process.env.PRICE_ID_SUB3) {
+    filePath = path.join(process.cwd(), 'public', 'Sub3-Marathon.pdf');
+    subject = 'Sub 3 Hour Marathon Plan';
+    text = 'Thank you for your purchase of the Sub 3 Hour Marathon Plan! Here is your e-book.';
+  } else {
+    console.error('Ungültige Price-ID:', priceId);
+    return;
   }
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: language === 'en' ? 'The Engine e-book' : 'The Engine E-Book',
-    text: language === 'en'
-      ? 'Thank you for your purchase! Here is your e-book.'
-      : 'Vielen Dank für deinen Kauf! Hier ist dein E-Book.',
+    subject: subject,
+    text: text,
     attachments: [
       {
-        filename: language === 'en' ? 'The-Engine_English.pdf' : 'The-Engine.pdf',
+        filename: path.basename(filePath),
         path: filePath,
         contentType: 'application/pdf',
       },

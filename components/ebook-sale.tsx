@@ -2,38 +2,46 @@
 
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { motion, AnimatePresence } from "framer-motion";
-import { wrap } from "popmotion";
-import { useSwipeable } from 'react-swipeable';
+import { motion } from "framer-motion";
 import SectionHeading from "./section-heading";
 import { useSectionInView } from "@/lib/hooks";
 
 // Stripe-Setup
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-// Bilder für das Karussell
-const images = ["/cover.jpg", "/cover2.jpg", "/cover3.jpg"];
+// Bücher-Daten
+const books = [
+  {
+    title: "Sub 4 Hour Marathon Plan",
+    price: "€19.00 EUR",
+    description:
+      "The Sub-4-Hour Marathon Plan guides you to finish in under 4 hours with structured long runs, tempo sessions, and interval training. Improve endurance, speed, and mental strength over 12 weeks. Perfect for runners looking to break the 4-hour barrier!",
+    image: "/01img.jpg",
+    priceId: process.env.NEXT_PUBLIC_PRICE_ID_SUB4,
+  },
+  {
+    title: "Sub 3:30 Marathon Plan",
+    price: "€19.00 EUR",
+    description:
+      "The Sub-3:30 Marathon Plan is designed for experienced runners aiming to break 3 hours 30 minutes. It combines endurance, speed, and strength training over 12 weeks to maintain a 4:58 min/km pace, helping you achieve your marathon goals efficiently.",
+    image: "/02img.jpg",
+    priceId: process.env.NEXT_PUBLIC_PRICE_ID_SUB330,
+  },
+  {
+    title: "Sub 3 Hour Marathon Plan",
+    price: "€19.00 EUR",
+    description:
+      "The Sub-3 Marathon Plan is for experienced runners aiming to break 3 hours. Over 12 weeks, it combines endurance, speed, and strength training to maintain a 4:16 min/km pace, helping you reach peak performance and achieve your marathon goal.",
+    image: "/03img.jpg",
+    priceId: process.env.NEXT_PUBLIC_PRICE_ID_SUB3,
+  },
+];
 
 const EbookSale = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
-  const [[page, direction], setPage] = useState([0, 0]);
   const [isLoading, setIsLoading] = useState(false);
-  const imageIndex = wrap(0, images.length, page);
-  const { ref } = useSectionInView("Ebook");
+  const { ref } = useSectionInView("Training Plans");
 
-  // Swipeable-Konfiguration
-  const handlers = useSwipeable({
-    onSwipedLeft: () => paginate(1),
-    onSwipedRight: () => paginate(-1),
-    trackMouse: true,
-  });
-
-  const handleBuy = async () => {
-    if (!selectedLanguage) {
-      alert("Please select a language before proceeding.");
-      return;
-    }
-
+  const handleBuy = async (priceId: string) => {
     setIsLoading(true);
 
     try {
@@ -41,7 +49,7 @@ const EbookSale = () => {
 
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
-        body: JSON.stringify({ language: selectedLanguage }),
+        body: JSON.stringify({ priceId }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -62,10 +70,6 @@ const EbookSale = () => {
     }
   };
 
-  const paginate = (newDirection: number) => {
-    setPage([page + newDirection, newDirection]);
-  };
-
   return (
     <motion.section
       ref={ref}
@@ -73,123 +77,59 @@ const EbookSale = () => {
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.175 }}
-      id="ebook"
+      id="plans"
     >
-      <SectionHeading>Ebook</SectionHeading>
+      <SectionHeading>Training Plans</SectionHeading>
 
-      <div className="flex flex-col items-center mt-12 sm:flex-row">
-        <motion.div
-          className="relative overflow-hidden w-full max-w-md sm:max-w-sm sm:mr-8 sm:w-[30rem]"
-          {...handlers}
-        >
-          <div className="relative w-full h-[40rem] sm:h-[35rem]">
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.img
-                key={page}
-                src={images[imageIndex]}
-                alt="E-Book Cover"
-                className="absolute inset-0 w-full h-full object-cover rounded-lg shadow-lg"
-                initial={{ opacity: 0, x: direction > 0 ? 100 : -100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: direction > 0 ? -100 : 100 }}
-                transition={{ duration: 0.5 }}
-              />
-            </AnimatePresence>
-          </div>
-
-          {/* Navigation Buttons */}
-          <div className="absolute top-1/2 left-0 transform -translate-y-1/2">
-            <button
-              aria-label="Previous Image"
-              className="p-2 text-black hover:text-white transition-colors duration-300"
-              onClick={() => paginate(-1)}
-            >
-              &lt;
-            </button>
-          </div>
-          <div className="absolute top-1/2 right-0 transform -translate-y-1/2">
-            <button
-              aria-label="Next Image"
-              className="p-2 text-black hover:text-white transition-colors duration-300"
-              onClick={() => paginate(1)}
-            >
-              &gt;
-            </button>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="flex-1 flex flex-col items-center justify-center text-left mt-6 sm:mt-0"
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <p className="text-xl font-bold mb-6">€34.00 EUR</p>
-
-          <p className="mb-6 leading-relaxed text-center">
-            The Engine: A Guide to Hyrox, Marathon, and Half-Marathon Training.
-            This comprehensive guide offers training plans, strength workouts, endurance tips, and nutrition strategies to help athletes of all levels prepare for Hyrox and long-distance races.
-          </p>
-
-          {/* Container für das Dropdown-Menü */}
-          <div className="flex flex-col items-center w-full mb-4">
-            <label htmlFor="language" className="font-medium mb-2">
-              Choose Language:
-            </label>
-            <select
-              id="language"
-              value={selectedLanguage}
-              onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="p-3 border rounded-md text-center w-3/4 sm:w-1/2 md:w-3/4 lg:w-3/5 xl:w-2/5"
-            >
-              <option value="">Select a language</option>
-              <option value="de">German</option>
-              <option value="en">English</option>
-            </select>
-          </div>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-purple-600 text-white py-2 px-5 rounded-md shadow-md hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={handleBuy}
-            disabled={isLoading}
+      <div className="flex flex-col items-center mt-12">
+        {books.map((book, index) => (
+          <motion.div
+            key={index}
+            className="flex flex-col sm:flex-row items-center mb-12 w-full"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 * index }}
           >
-            {isLoading ? "Processing..." : "Get the Book"}
-          </motion.button>
-        </motion.div>
+            {/* Bilder auf mobilen Geräten beschneiden, auf Desktop unverändert */}
+            <motion.div
+              className="w-full sm:w-1/3 h-64 sm:h-auto overflow-hidden mb-6 sm:mb-0 sm:mr-8"
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <img
+                src={book.image}
+                alt={`${book.title} Cover`}
+                className="object-cover object-center w-full h-full sm:h-auto rounded-lg shadow-lg"
+              />
+            </motion.div>
+
+            {/* Text and Button container */}
+            <div className="flex-1 text-center sm:text-left flex flex-col items-center sm:items-start">
+              {/* Keine fettgedruckte Schrift für die Überschriften */}
+              <h3 className="text-2xl mb-2">{book.title}</h3>
+              {/* Preis ebenfalls nicht fett */}
+              <p className="text-xl mb-4">{book.price}</p>
+              <p className="mb-6">{book.description}</p>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group bg-purple-600 text-white px-7 py-3 flex items-center justify-center sm:justify-start gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 hover:bg-purple-700 active:scale-105 transition"
+                onClick={() => handleBuy(book.priceId!)}
+                disabled={isLoading}
+              >
+                {isLoading ? "Processing..." : "Buy Now"}
+                <motion.span className="opacity-70 group-hover:translate-x-1 transition">
+                  →
+                </motion.span>
+              </motion.button>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </motion.section>
   );
 };
 
 export default EbookSale;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
