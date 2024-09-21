@@ -5,6 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { motion } from "framer-motion";
 import SectionHeading from "./section-heading";
 import { useSectionInView } from "@/lib/hooks";
+import Image from "next/image";  // Importiere Image von next/image
 
 // Stripe-Setup
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -90,32 +91,50 @@ const EbookSale = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 * index }}
           >
-            {/* Bilder auf mobilen Geräten beschneiden, auf Desktop unverändert */}
+            {/* Unterschiedliches Verhalten für mobile und Desktop-Ansichten */}
             <motion.div
-              className="w-full sm:w-1/3 h-64 sm:h-auto overflow-hidden mb-6 sm:mb-0 sm:mr-8"
+              className="relative w-full sm:w-1/3 h-64 sm:h-auto mb-6 sm:mb-0 sm:mr-8"
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <img
-                src={book.image}
-                alt={`${book.title} Cover`}
-                className="object-cover object-center w-full h-full sm:h-auto rounded-lg shadow-lg"
-              />
+              {/* Verwende das Next.js <Image /> Tag */}
+              <div className="block sm:hidden"> {/* Für mobile Geräte */}
+                <Image
+                  src={book.image}
+                  alt={`${book.title} Cover`}
+                  layout="fill"  // Füllt den Container
+                  objectFit="cover"  // Skaliert das Bild, um den Container zu füllen
+                  objectPosition="top 15%"  // Zeigt das Bild etwas weiter oben an
+                  className="rounded-lg shadow-lg"
+                />
+              </div>
+
+              <div className="hidden sm:block"> {/* Für Desktop-Geräte */}
+                <Image
+                  src={book.image}
+                  alt={`${book.title} Cover`}
+                  layout="responsive"  // Responsives Layout für Desktop
+                  width={640}
+                  height={480}
+                  className="rounded-lg shadow-lg"
+                />
+              </div>
             </motion.div>
 
             {/* Text and Button container */}
             <div className="flex-1 text-center sm:text-left flex flex-col items-center sm:items-start">
-              {/* Keine fettgedruckte Schrift für die Überschriften */}
-              <h3 className="text-2xl mb-2">{book.title}</h3>
-              {/* Preis ebenfalls nicht fett */}
-              <p className="text-xl mb-4">{book.price}</p>
-              <p className="mb-6">{book.description}</p>
+              {/* Überschriftengröße verringert (text-xl) */}
+              <h3 className="text-xl mb-2">{book.title}</h3>
+              {/* Preisgröße verringert (text-lg) */}
+              <p className="text-lg mb-3">{book.price}</p>
+              {/* Text mit mb-4 */}
+              <p className="mb-4">{book.description}</p>
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group bg-purple-600 text-white px-7 py-3 flex items-center justify-center sm:justify-start gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 hover:bg-purple-700 active:scale-105 transition"
+                className="group bg-purple-600 text-white px-5 py-2 flex items-center justify-center sm:justify-start gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 hover:bg-purple-700 active:scale-105 transition"
                 onClick={() => handleBuy(book.priceId!)}
                 disabled={isLoading}
               >
@@ -133,3 +152,11 @@ const EbookSale = () => {
 };
 
 export default EbookSale;
+
+
+
+
+
+
+
+
