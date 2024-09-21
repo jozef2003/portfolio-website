@@ -33,7 +33,7 @@ const books = [
     price: "€19.00 EUR",
     description:
       "The Sub-3 Marathon Plan is for experienced runners aiming to break 3 hours. Over 12 weeks, it combines endurance, speed, and strength training to maintain a 4:16 min/km pace, helping you reach peak performance and achieve your marathon goal.",
-    image: "/03img.jpg",
+    image: "/03img.JPG",
     priceId: process.env.NEXT_PUBLIC_PRICE_ID_SUB3,
   },
 ];
