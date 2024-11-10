@@ -19,7 +19,7 @@ export default function Experience() {
     >
       <SectionHeading>My Experience</SectionHeading>
       <p className="mb-3">
-         In 2021, i discovered my passion for content creation. I started building a personal brand on my social media channels and now help companies to write, film and edit content to grow their audience. Additionally, I build websites with various functionalities. My past clients have included Amazon, Deichmann, Nike, Freeletics, as well as numerous local companies. 
+         In 2021, i discovered my passion for content creation. I started building a personal brand on my social media channels and now help companies to write, film and edit content to grow their audience.
       </p>
     </motion.section>
   );

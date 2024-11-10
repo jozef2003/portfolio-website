@@ -54,10 +54,18 @@ export default function Intro() {
          initial={{ opacity: 0, y: 100 }}
          animate={{ opacity: 1, y: 0}}
         >
-        <span className="font-bold">Hello, I am Jozef.</span> I am a{" "}
-        <span className="font-bold">motion designer, editor, videographer, developer and athlete</span> with{" "}
-        <span className="font-bold">multiple years</span> of experience in content creation. I enjoy
-        working on <span className="italic">creative projects</span>.
+<span className="block text-xl font-bold tracking-tight text-gray-900 mb-4 md:text-xl lg:text-xl">
+  Jozef Kapicak
+</span>
+<span className="block text-xl font-semibold text-gray-700 mb-6 md:text-2xl">
+  Train Smarter. Get Stronger. Live Healthier.
+</span>
+<span className="block max-w-3xl text-lg font-light text-gray-800 leading-relaxed md:text-xl">
+  Endurance and strength training go beyond the gym, they build the foundation for a better life. Discover how focused training can enhance your mental resilience, elevate your physical performance, and improve your well-being. Fitness is the ultimate tool for living a balanced and empowered life.
+</span>
+
+
+
         </motion.h1>
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-2 px-4 text-lg font-medium"
@@ -68,14 +76,14 @@ export default function Intro() {
          }}
         >
             <Link 
-                href="#contact" 
+                href="#plans" 
                 className="group bg-gray-900 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 hover:bg-gray-950 active:scale-105 transition"
                 onClick={() => {
-                  setActiveSection("Contact");
+                  setActiveSection("Training Plans");
                   setTimeOfLastClick(Date.now());
                 }}
                 >
-                Contact me here 
+                Use my Plans
                 <BsArrowRight className="opacity-70 group-hover:translate-x-1 transition" /> 
             </Link>
 

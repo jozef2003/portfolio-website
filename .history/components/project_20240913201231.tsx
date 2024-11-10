@@ -1,4 +1,4 @@
-'use client'
+/*'use client'
 
 import { useRef } from 'react';
 import SectionHeading from './section-heading'
@@ -19,16 +19,18 @@ export default function Project() {
     /*style={{
       scale: scaleProgess,
       opacity: opacityProgess,
-    }}*/
+    }}
     className="group scroll-mt-28 mb-3 sm:mb-8 sm:mr-6 sm:ml-6 last:mb-0"
     id='projects'
   >
     <section className="">
         <SectionHeading>My projects</SectionHeading>
-        <div>
-          <Video src={video01} width={430} height={242}/>
+        <div className='container mx-auto'>
+        <div className="pr-4 pl-4">
+          <Video src={video01} width={370} height={208} />
+        </div>
         </div>
     </section>
     </motion.div>
   )
-}
+}*/

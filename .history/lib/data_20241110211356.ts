@@ -72,7 +72,5 @@ export const skillsData = [
   "Prisma",
   "MongoDB",
   "Python",
-  "React Native",
-  "Expo",
-  "Firebase",
+  "Framer Motion",
 ] as const;

@@ -72,7 +72,7 @@ export const skillsData = [
   "Prisma",
   "MongoDB",
   "Python",
-  "React Native",
+  "React",
   "Expo",
   "Firebase",
 ] as const;

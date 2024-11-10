@@ -25,7 +25,7 @@ export default function About() {
         started documenting my exercise journey online, specifically to inspire people
         to live a healthier lifestyle. {" "}
         <span className="font-medium"> This brought me into contact
-        with the topic of content creation and editing. I have since developed further in this area and aquired new skills such as coding.</span>{" "}
+        with the topic of content creation and editing and I have since developed further in this area.</span>{" "}
         <span className="italic">What fascinates me about video/ photography
         and editing</span> is that you can always be creative when working on great projects.
       </p>

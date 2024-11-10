@@ -16,16 +16,8 @@ export const links = [
     hash: "#about",
   },
   {
-    name: "Projects",
-    hash: "#projects",
-  },
-  {
-    name: "Skills",
-    hash: "#skills",
-  },
-  {
-    name: "Experience",
-    hash: "#experience",
+    name: "Training Plans",
+    hash: "#plans",
   },
   {
     name: "Contact",
@@ -72,7 +64,5 @@ export const skillsData = [
   "Prisma",
   "MongoDB",
   "Python",
-  "React Native",
-  "Expo",
-  "Firebase",
+  "Framer Motion",
 ] as const;
